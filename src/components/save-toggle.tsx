@@ -1,20 +1,23 @@
 import { useState } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { motion } from "motion/react";
+import { cn } from "../utils";
 
 const SaveToggle = () => {
-  const [status, setStatus] = useState<
-    "start" | "loading" | "saved" | "finished"
-  >("start");
+  const [status, setStatus] = useState<"start" | "loading" | "saved">("start");
+  const [showText, setShowText] = useState(false);
 
   const handleClick = () => {
     if (status === "start") {
       setStatus("loading");
       setTimeout(() => {
         setStatus("saved");
-        setTimeout(() => setStatus("finished"), 400);
+        setTimeout(() => {
+          setShowText(true);
+        }, 500);
       }, 2000);
-    } else if (status === "finished") {
+    } else if (status === "saved" && showText) {
+      setShowText(false);
       setStatus("start");
     }
   };
@@ -83,57 +86,55 @@ const SaveToggle = () => {
       case "saved":
         return (
           <motion.div
-            exit={{ x: -15 }}
-            className="bg-[#2e2d2b] rounded-full flex justify-center items-center h-10 w-10"
-          >
-            <FaCircleCheck className="text-white text-xl" />
-          </motion.div>
-        );
-
-      case "finished":
-        return (
-          <motion.div
             initial={{
               width: 40,
-              height: 40,
               backgroundColor: "#2e2d2b",
-              borderRadius: 60,
+              borderRadius: 100,
             }}
             animate={{
-              width: 110,
-              backgroundColor: "white",
-              borderRadius: 35,
+              width: showText ? 110 : 40,
+              backgroundColor: showText ? "white" : "#2e2d2b",
+              borderRadius: showText ? 35 : 100,
             }}
             transition={{
               type: "spring",
               damping: 14,
               stiffness: 120,
               mass: 1.5,
-              duration: 0.4,
+              duration: 0.3,
             }}
-            className="h-10 flex justify-center items-center gap-x-2 border border-[#ebeae4] "
+            className={cn(
+              "h-10 flex justify-center items-center gap-x-2 border border-[#ebeae4] ",
+              showText ? "bg-white" : "bg-[#2e2d2b]"
+            )}
           >
             <motion.div
               {...fadeSlide({
-                x: 0,
-                y: 0,
-                color: "#fff",
-                opacity: 1,
-                duration: 0.7,
+                x: showText ? 10 : 0,
+                duration: 0.3,
+                color: showText ? "#63615c" : "white",
               })}
-              animate={{ x: 0, color: "#63615c" }}
+              className="flex justify-center items-center"
             >
-              <FaCircleCheck className="text-xl" />
+              <FaCircleCheck
+                className={cn(
+                  "text-xl",
+                  showText ? "text-[#63615c]" : "text-white"
+                )}
+              />
             </motion.div>
-            <motion.div
-              {...fadeSlide({
-                x: -10,
-                duration: 0.7,
-              })}
-              className="text-[#63615c]"
-            >
-              Saved
-            </motion.div>
+
+            {showText && (
+              <motion.div
+                {...fadeSlide({
+                  x: -10,
+                  duration: 0.6,
+                })}
+                className="text-[#63615c] overflow-hidden"
+              >
+                Saved
+              </motion.div>
+            )}
           </motion.div>
         );
     }
