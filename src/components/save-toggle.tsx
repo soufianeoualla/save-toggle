@@ -12,17 +12,27 @@ const SaveToggle = () => {
       setStatus("loading");
       setTimeout(() => {
         setStatus("saved");
-        setTimeout(() => setStatus("finished"), 300);
-      }, 1000);
+        setTimeout(() => setStatus("finished"), 400);
+      }, 2000);
     } else if (status === "finished") {
       setStatus("start");
     }
   };
 
-  const fadeSlide = (x = 0, y = 0, color?: string) => ({
+  const fadeSlide = ({
+    x,
+    y = 0,
+    color,
+    duration,
+  }: {
+    x: number;
+    y?: number;
+    color?: string;
+    duration?: number;
+  }) => ({
     initial: { opacity: 0, x, y, color },
     animate: { opacity: 1, x: 0, y: 0, color: color || undefined },
-    transition: { duration: 0.3 },
+    transition: { duration: duration ?? 0.3 },
   });
 
   const renderContent = () => {
@@ -30,7 +40,14 @@ const SaveToggle = () => {
       case "start":
         return (
           <div className="bg-[#ebeae4] flex justify-center items-center text-neutral-900 w-[80px] h-10 rounded-4xl">
-            <motion.span {...fadeSlide(0, 10)}>Save</motion.span>
+            <motion.span
+              {...fadeSlide({
+                x: 0,
+                y: 10,
+              })}
+            >
+              Save
+            </motion.span>
           </div>
         );
 
@@ -51,7 +68,7 @@ const SaveToggle = () => {
             }}
             transition={{
               type: "spring",
-              damping: 16,
+              damping: 15,
               stiffness: 120,
               mass: 1.5,
             }}
@@ -63,9 +80,13 @@ const SaveToggle = () => {
 
       case "saved":
         return (
-          <div className="bg-[#2e2d2b] rounded-full flex justify-center items-center h-10 w-10">
+          <motion.div
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 15 }}
+            className="bg-[#2e2d2b] rounded-full flex justify-center items-center h-10 w-10"
+          >
             <FaCircleCheck className="text-white text-xl" />
-          </div>
+          </motion.div>
         );
 
       case "finished":
@@ -83,7 +104,6 @@ const SaveToggle = () => {
               width: 110,
               backgroundColor: "transparent",
               borderRadius: 35,
-              border: "1px solid #ebeae4",
             }}
             transition={{
               type: "spring",
@@ -91,15 +111,25 @@ const SaveToggle = () => {
               stiffness: 120,
               mass: 1.5,
             }}
-            className="h-10 flex justify-center items-center gap-x-2"
+            className="h-10 flex justify-center items-center gap-x-2 border border-[#ebeae4] "
           >
             <motion.div
-              {...fadeSlide(15, 0, "#fff")}
+              {...fadeSlide({
+                x: 15,
+                y: 0,
+                color: "#fff",
+              })}
               animate={{ opacity: 1, x: 0, color: "#63615c" }}
             >
               <FaCircleCheck className="text-xl" />
             </motion.div>
-            <motion.div {...fadeSlide(-15)} className="text-[#63615c]">
+            <motion.div
+              {...fadeSlide({
+                x: -15,
+                duration: 0.5,
+              })}
+              className="text-[#63615c]"
+            >
               Saved
             </motion.div>
           </motion.div>
