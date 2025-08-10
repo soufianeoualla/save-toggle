@@ -23,16 +23,18 @@ const SaveToggle = () => {
     x,
     y = 0,
     color,
-    duration,
+    duration = 0.3,
+    opacity = 0,
   }: {
     x: number;
     y?: number;
     color?: string;
     duration?: number;
+    opacity?: number;
   }) => ({
-    initial: { opacity: 0, x, y, color },
+    initial: { opacity: opacity, x, y, color },
     animate: { opacity: 1, x: 0, y: 0, color: color || undefined },
-    transition: { duration: duration ?? 0.3 },
+    transition: { duration: duration },
   });
 
   const renderContent = () => {
@@ -107,7 +109,7 @@ const SaveToggle = () => {
             }}
             transition={{
               type: "spring",
-              damping: 16,
+              damping: 14,
               stiffness: 120,
               mass: 1.5,
             }}
@@ -118,15 +120,16 @@ const SaveToggle = () => {
                 x: 15,
                 y: 0,
                 color: "#fff",
+                opacity: 1,
               })}
-              animate={{ opacity: 1, x: 0, color: "#63615c" }}
+              animate={{ x: 0, color: "#63615c" }}
             >
               <FaCircleCheck className="text-xl" />
             </motion.div>
             <motion.div
               {...fadeSlide({
                 x: -15,
-                duration: 0.5,
+                duration: 0.6,
               })}
               className="text-[#63615c]"
             >
