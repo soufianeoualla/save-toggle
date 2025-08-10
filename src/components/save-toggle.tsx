@@ -114,14 +114,9 @@ const SaveToggle = () => {
                 duration: 0.3,
                 color: showText ? "#63615c" : "white",
               })}
-              className="flex justify-center items-center"
+              className="flex justify-center items-center text-xl"
             >
-              <FaCircleCheck
-                className={cn(
-                  "text-xl",
-                  showText ? "text-[#63615c]" : "text-white"
-                )}
-              />
+              <FaCircleCheck />
             </motion.div>
 
             {showText && (
